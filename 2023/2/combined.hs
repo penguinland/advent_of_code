@@ -1,5 +1,5 @@
 import Text.Parsec(choice, endBy, eof, many, parse, sepBy, try)
-import Text.Parsec.Char(digit, char, string)
+import Text.Parsec.Char(char, digit, string)
 import Text.ParserCombinators.Parsec(GenParser)
 
 
