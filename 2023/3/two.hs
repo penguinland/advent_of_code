@@ -29,14 +29,12 @@ parseRow = parseRow' Nothing
 
 
 findGears :: [[Piece]] -> [Int]
---findGears :: [[Piece]] -> [((Piece, Piece, Piece),(Piece, Piece, Piece),(Piece, Piece, Piece))]
 findGears schematic = concat $ zipWith3 findGearsInRow (init $ init schematic)
                                                        (tail $ init schematic)
                                                        (tail $ tail schematic)
 
 
 findGearsInRow :: [Piece] -> [Piece] -> [Piece] -> [Int]
---findGearsInRow :: [Piece] -> [Piece] -> [Piece] -> [((Piece, Piece, Piece),(Piece, Piece, Piece),(Piece, Piece, Piece))]
 findGearsInRow above target below = let
     cols = zip3 above target below
     spots = zip3 (init $ init cols) (tail $ init cols) (tail $ tail cols)
@@ -49,7 +47,6 @@ findGearsInRow above target below = let
         filter isNumber $ a : d : findDistinct [q, w, e] ++ findDistinct [z, x, c]
   in
     map product . map (map getNumber) . filter ((== 2) . length) . map findNumbers . filter isAsterisk $ spots
-    --filter isAsterisk $ spots
 
 
 pad :: [String] -> [String]
@@ -61,4 +58,3 @@ pad schematic = let
 
 main :: IO()
 main = getContents >>= print . sum . findGears . map parseRow . pad . lines
---main = getContents >>= print . findGears . map parseRow . pad . lines
