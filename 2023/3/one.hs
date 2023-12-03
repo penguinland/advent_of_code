@@ -38,11 +38,10 @@ findPartNumbers = findPartNumbers' 0 False
     findPartNumbers' total bySymbol ((value, bySymbol', continued):rest) = let
         newTotal = 10 * total + value
         nearSymbol = bySymbol || bySymbol'
-        maybePrependValue = if nearSymbol then (newTotal :) else id
       in
         if continued
         then findPartNumbers' newTotal nearSymbol rest
-        else maybePrependValue $ findPartNumbers rest
+        else (if nearSymbol then (newTotal :) else id) $ findPartNumbers rest
 
 
 pad :: [String] -> [String]
