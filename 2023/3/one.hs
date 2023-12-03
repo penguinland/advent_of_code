@@ -16,8 +16,9 @@ findDigits schematic = concat $ zipWith3 findDigitsInRow (init $ init schematic)
 
 findDigitsInRow :: String -> String -> String -> [(Int, Bool, Bool)]
 findDigitsInRow above target below = let
-    checkColumn a t b = (if isDigit t then Just (digitToInt t) else Nothing,
-                         any isSymbol [a, t, b])
+    checkColumn above target below =
+        (if isDigit target then Just (digitToInt target) else Nothing,
+         any isSymbol [above, target, below])
     columnData = zipWith3 checkColumn above target below
     checkNeighbors (aVal, aSym) (bVal, bSym) (cVal, cSym) =
         (bVal, or [aSym, bSym, cSym], cVal /= Nothing)
