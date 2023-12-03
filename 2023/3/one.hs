@@ -44,13 +44,21 @@ findPartNumbers = findPartNumbers' 0 False
 
 partNumbers :: [String] -> [Int]
 partNumbers schematic = let
-    allDots = '.' : allDots
-    paddedSchematic = allDots : map (('.' :) . (++ ".")) schematic ++ [allDots]
+    paddedSchematic = pad schematic
     digits = findDigits paddedSchematic
   in
     findPartNumbers digits
 
 
+pad :: [String] -> [String]
+pad schematic = let
+    allDots = '.' : allDots
+  in
+    allDots : map (('.' :) . (++ ".")) schematic ++ [allDots]
+
+
+
 main :: IO()
 main = do
-    getContents >>= print . sum . partNumbers . lines
+    --getContents >>= print . sum . partNumbers . lines
+    getContents >>= print . findDigits . pad . lines
