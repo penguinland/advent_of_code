@@ -1,5 +1,6 @@
 import Data.Char(digitToInt, isDigit)
 import Data.List(group)
+import Data.Maybe(fromMaybe)
 
 
 data Piece = Number Int | Asterisk | Other deriving (Eq, Show)
@@ -14,13 +15,11 @@ leadingNumber = read . takeWhile isDigit
 parseRow :: String -> [Piece]
 parseRow = parseRow' Nothing
   where
-    parseRow' _ ('*':as) = Asterisk : parseRow' Nothing as
-    parseRow' Nothing (a:as) | isDigit a =
-        let value = leadingNumber (a:as)
+    parseRow' _ ('*':as) = Asterisk : parseRow as
+    parseRow' previous (a:as) | isDigit a =
+        let value = fromMaybe (leadingNumber (a:as)) previous
         in Number value : parseRow' (Just value) as
-    parseRow' (Just value) (a:as) | isDigit a =
-        Number value : parseRow' (Just value) as
-    parseRow' _ (_:as) = Other : parseRow' Nothing as
+    parseRow' _ (_:as) = Other : parseRow as
     parseRow' _ [] = []
 
 
