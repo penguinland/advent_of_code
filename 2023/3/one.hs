@@ -2,16 +2,16 @@ import Data.Char(digitToInt, isDigit)
 
 
 isSymbol :: Char -> Bool
-isSymbol = and . (map (==) "1234567890." <*>) . pure
+isSymbol = and . (map (/=) "1234567890." <*>) . pure
 
 
 -- In the output, the first bool is whether this digit is adjacent to a symbol,
 -- and the second one is whether it is immediately followed by another digit as
 -- part of the same number.
 findDigits :: [String] -> [(Int, Bool, Bool)]
-findDigits schematic = concat $ zipWith3 findDigitsInRow (tail $ tail schematic)
+findDigits schematic = concat $ zipWith3 findDigitsInRow (init $ init schematic)
                                                          (tail $ init schematic)
-                                                         (init $ init schematic)
+                                                         (tail $ tail schematic)
 
 
 findDigitsInRow :: String -> String -> String -> [(Int, Bool, Bool)]
@@ -21,9 +21,9 @@ findDigitsInRow above target below = let
     columnData = zipWith3 checkColumn above target below
     checkNeighbors (aVal, aSym) (bVal, bSym) (cVal, cSym) =
         (bVal, or [aSym, bSym, cSym], cVal /= Nothing)
-    neighborData = zipWith3 checkNeighbors (tail $ tail columnData)
+    neighborData = zipWith3 checkNeighbors (init $ init columnData)
                                            (init $ tail columnData)
-                                           (init $ init columnData)
+                                           (tail $ tail columnData)
   in
     -- There must be a better way to do this, but I couldn't think of it...
     map (\(Just x, y, z) -> (x, y, z)) .
@@ -60,5 +60,4 @@ pad schematic = let
 
 main :: IO()
 main = do
-    --getContents >>= print . sum . partNumbers . lines
-    getContents >>= print . findDigits . pad . lines
+    getContents >>= print . sum . partNumbers . lines
