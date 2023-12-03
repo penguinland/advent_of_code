@@ -38,10 +38,11 @@ findGearsInRow above target below = let
     isNumber (Number _) = True
     isNumber _          = False
     getNumber (Number x) = x
-    findNumbers ((q, a, z), (w, s, x), (e, d, c)) =
-        filter isNumber $ a : d : findDistinct [q, w, e] ++ findDistinct [z, x, c]
+    findNumbers ((q, a, z), (w, s, x), (e, d, c)) = filter isNumber $
+        a : d : findDistinct [q, w, e] ++ findDistinct [z, x, c]
   in
-    map product . map (map getNumber) . filter ((== 2) . length) . map findNumbers . filter isAsterisk $ spots
+    map (product . map getNumber) . filter ((== 2) . length) .
+        map findNumbers . filter isAsterisk $ spots
 
 
 pad :: [String] -> [String]
