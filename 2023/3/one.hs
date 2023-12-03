@@ -42,13 +42,6 @@ findPartNumbers = findPartNumbers' 0 False
     findPartNumbers' total bySymbol ((value, bySymbol', True ):rest) =
         findPartNumbers' (appendDigit total value) (bySymbol || bySymbol') rest
 
-partNumbers :: [String] -> [Int]
-partNumbers schematic = let
-    paddedSchematic = pad schematic
-    digits = findDigits paddedSchematic
-  in
-    findPartNumbers digits
-
 
 pad :: [String] -> [String]
 pad schematic = let
@@ -57,7 +50,5 @@ pad schematic = let
     allDots : map (('.' :) . (++ ".")) schematic ++ [allDots]
 
 
-
 main :: IO()
-main = do
-    getContents >>= print . sum . partNumbers . lines
+main = getContents >>= print . sum . findPartNumbers . findDigits . pad . lines
