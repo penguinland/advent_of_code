@@ -6,11 +6,7 @@ data Piece = Number Int | Asterisk | Other deriving (Eq, Show)
 
 
 leadingNumber :: String -> Int
-leadingNumber = leadingNumber' 0
-  where
-    leadingNumber' previous (a:as) | isDigit a =
-        leadingNumber' (10 * previous + digitToInt a) as
-    leadingNumber' previous _ = previous
+leadingNumber = read . takeWhile isDigit
 
 
 -- Each digit will get turned into its own copy of the entire number. For
