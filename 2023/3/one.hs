@@ -42,7 +42,7 @@ findPartNumbers = findPartNumbers' 0 False
       in
         if continued
         then findPartNumbers' newTotal nearSymbol rest
-        else maybePrependValue $ findPartNumbers' 0 False rest
+        else maybePrependValue $ findPartNumbers rest
 
 
 pad :: [String] -> [String]
