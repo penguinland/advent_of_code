@@ -34,13 +34,15 @@ findDigitsInRow above target below = let
 findPartNumbers :: [(Int, Bool, Bool)] -> [Int]
 findPartNumbers = findPartNumbers' 0 False
   where
-    appendDigit total value = 10 * total + value
     findPartNumbers' _ _ [] = []
-    findPartNumbers' total bySymbol ((value, bySymbol', False):rest) =
-        (if bySymbol || bySymbol' then (appendDigit total value :) else id) $
-            findPartNumbers' 0 False rest
-    findPartNumbers' total bySymbol ((value, bySymbol', True ):rest) =
-        findPartNumbers' (appendDigit total value) (bySymbol || bySymbol') rest
+    findPartNumbers' total bySymbol ((value, bySymbol', continued):rest) = let
+        newTotal = 10 * total + value
+        nearSymbol = bySymbol || bySymbol'
+        maybePrependValue = if nearSymbol then (newTotal :) else id
+      in
+        if continued
+        then findPartNumbers' newTotal nearSymbol rest
+        else maybePrependValue $ findPartNumbers' 0 False rest
 
 
 pad :: [String] -> [String]
