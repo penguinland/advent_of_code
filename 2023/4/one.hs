@@ -1,5 +1,5 @@
 import Data.HashSet(fromList, intersection, size)
-import Text.Parsec(eof, many1, parse, sepBy)
+import Text.Parsec(eof, many, many1, parse, sepBy)
 import Text.Parsec.Char(char, digit, string)
 
 
