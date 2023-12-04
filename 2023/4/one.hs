@@ -37,4 +37,7 @@ score x = 2 ^ (x - 1)
 
 
 main :: IO()
-main = getContents >>= print . sum . map (score . winningNums . parseGame) . lines
+main = do
+    stdin <- getContents
+    let games = map parseGame . lines $ stdin
+    print . sum . map (score . winningNums) $ games
