@@ -1,5 +1,5 @@
 import Data.HashSet(fromList, intersection, size)
-import Text.Parsec(eof, many, many1, parse, sepBy)
+import Text.Parsec(eof, many1, parse, sepBy)
 import Text.Parsec.Char(char, digit, string)
 
 
@@ -24,7 +24,7 @@ parseGame input = case parse parseLine "malformed" input of
         eof
         return Scratch{ticketId=ticketId, winners=winners, nums=nums}
     whitespace = many1 (char ' ')
-    parseNumber = many digit >>= return . read
+    parseNumber = many1 digit >>= return . read
 
 
 winningNums :: Scratch -> [Int]
