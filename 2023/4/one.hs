@@ -32,8 +32,8 @@ winningNums s = intersection (fromList $ winners s) (fromList $ nums s)
 
 
 score :: [Int] -> Int
-score 0 = 0
-score x = 2 ^ (x - 1)
+score [] = 0
+score x  = 2 ^ (length x - 1)
 
 
 main :: IO()
