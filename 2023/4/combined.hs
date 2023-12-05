@@ -1,5 +1,4 @@
 import Control.FromSum(fromEither)
-import Data.Either(fromRight)
 import Data.HashSet(HashSet, fromList, intersection, size)
 import Text.Parsec(endBy, eof, many1, parse, sepBy)
 import Text.Parsec.Char(char, digit, string)
@@ -12,14 +11,11 @@ parseGame :: String -> Scratch
 parseGame = fromEither (error . show) . parse parseLine ""
   where
     parseLine = do
-        string "Card"
-        whitespace
+        string "Card" >> whitespace
         ticketId <- parseNumber
-        char ':'
-        whitespace
+        char ':' >> whitespace
         winners <- endBy parseNumber whitespace
-        string "|"
-        whitespace
+        string "|" >> whitespace
         nums <- sepBy parseNumber whitespace
         eof
         return Scratch{ticketId=ticketId, winners=winners, nums=nums}
@@ -36,16 +32,16 @@ score x  = if x == mempty then 0 else 2 ^ (size x - 1)
 
 
 addCards :: [Int] -> [Int]
-addCards scores = let
+addCards = let
     startingCards = 1 : startingCards
-    addCards' []             _              = []
-    addCards' (score:scores) (count:counts) = count : addCards' scores counts'
+    addCards' _              []             = []
+    addCards' (count:counts) (score:scores) = count : addCards' counts' scores
       where
         counts' = applyToN score (+ count) counts
         applyToN 0 _ rest   = rest
         applyToN n f (x:xs) = f x : applyToN (n - 1) f xs
   in
-    addCards' scores startingCards
+    addCards' startingCards
 
 
 main :: IO()
