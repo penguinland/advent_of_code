@@ -14,8 +14,12 @@ parseGame = fromEither (error . show) . parse parseLine ""
         string "Card" >> whitespace
         ticketId <- parseNumber
         char ':' >> whitespace
+        -- Sneaky trouble here: intuitively it's `sepBy parseNumber whitespace` followed by
+        -- `whitespace >> char '|' >> whitespace`. but the sepBy tries matching the whitespace for
+        -- another number, and then the unexpected '|' pushes it to go on. There ought to be a way
+        -- to avoid this with `Parsec.try`, but I haven't figured it out yet.
         winners <- endBy parseNumber whitespace
-        string "|" >> whitespace
+        char '|' >> whitespace
         nums <- sepBy parseNumber whitespace
         eof
         return Scratch{ticketId=ticketId, winners=winners, nums=nums}
