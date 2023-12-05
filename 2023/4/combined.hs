@@ -31,6 +31,11 @@ winningNums :: Scratch -> HashSet Int
 winningNums s = intersection (fromList $ winners s) (fromList $ nums s)
 
 
+-- Sneaky trouble here: I originally wrote
+--     score mempty = 0
+--     score x      = 2 ^ (size x - 1)
+-- and the compiler warned me that the second one would be unused because the first one always
+-- matched. Remember that mempty is not a pattern!
 score :: HashSet Int -> Int
 score x  = if x == mempty then 0 else 2 ^ (size x - 1)
 
