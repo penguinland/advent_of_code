@@ -1,5 +1,7 @@
-import Data.HashSet(fromList, intersection, size)
-import Text.Parsec(eof, many1, parse, sepBy)
+import Control.FromSum(fromEither)
+import Data.Either(fromRight)
+import Data.HashSet(HashSet, fromList, intersection, size)
+import Text.Parsec(endBy, eof, many1, parse, sepBy)
 import Text.Parsec.Char(char, digit, string)
 
 
@@ -7,9 +9,7 @@ data Scratch = Scratch{ticketId :: Int, winners :: [Int], nums :: [Int]}
 
 
 parseGame :: String -> Scratch
-parseGame input = case parse parseLine "malformed" input of
-    Left e -> error (show e)
-    Right g -> g
+parseGame = fromEither (error . show) . parse parseLine ""
   where
     parseLine = do
         string "Card"
@@ -17,8 +17,8 @@ parseGame input = case parse parseLine "malformed" input of
         ticketId <- parseNumber
         char ':'
         whitespace
-        winners <- sepBy parseNumber whitespace
-        string " |"
+        winners <- endBy parseNumber whitespace
+        string "|"
         whitespace
         nums <- sepBy parseNumber whitespace
         eof
@@ -27,13 +27,12 @@ parseGame input = case parse parseLine "malformed" input of
     parseNumber = many1 digit >>= return . read
 
 
-winningNums :: Scratch -> [Int]
+winningNums :: Scratch -> HashSet Int
 winningNums s = intersection (fromList $ winners s) (fromList $ nums s)
 
 
-score :: [Int] -> Int
-score [] = 0
-score x  = 2 ^ (length x - 1)
+score :: HashSet Int -> Int
+score x  = if x == mempty then 0 else 2 ^ (size x - 1)
 
 
 main :: IO()
