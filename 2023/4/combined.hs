@@ -14,10 +14,11 @@ parseGame = fromEither (error . show) . parse parseLine ""
         string "Card" >> whitespace
         ticketId <- parseNumber
         char ':' >> whitespace
-        -- Sneaky trouble here: intuitively it's `sepBy parseNumber whitespace` followed by
-        -- `whitespace >> char '|' >> whitespace`. but the sepBy tries matching the whitespace for
-        -- another number, and then the unexpected '|' pushes it to go on. There ought to be a way
-        -- to avoid this with `Parsec.try`, but I haven't figured it out yet.
+        -- Sneaky trouble here: intuitively it's `sepBy parseNumber whitespace`
+		-- followed by `string " | "`. but the sepBy tries matching the
+		-- whitespace for the next number, and then the unexpected '|' pushes
+		-- it to go on. There ought to be a way to avoid this with
+		-- `Parsec.try`, but I haven't figured it out yet.
         winners <- endBy parseNumber whitespace
         char '|' >> whitespace
         nums <- sepBy parseNumber whitespace
@@ -31,6 +32,11 @@ winningNums :: Scratch -> HashSet Int
 winningNums s = intersection (fromList $ winners s) (fromList $ nums s)
 
 
+-- Sneaky trouble here: I originally wrote
+--     score mempty = 0
+--     score x      = 2 ^ (size x - 1)
+-- and the compiler warned me that the second one would be unused because the
+-- first one always matched. Remember that mempty is not a pattern!
 score :: HashSet Int -> Int
 score x  = if x == mempty then 0 else 2 ^ (size x - 1)
 
