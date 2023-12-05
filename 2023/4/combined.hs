@@ -32,7 +32,8 @@ score x  = if x == mempty then 0 else 2 ^ (size x - 1)
 
 
 addCards :: [Int] -> [Int]
-addCards = let
+addCards = addCards' startingCards
+  where
     startingCards = 1 : startingCards
     addCards' _              []             = []
     addCards' (count:counts) (score:scores) = count : addCards' counts' scores
@@ -40,14 +41,11 @@ addCards = let
         counts' = applyToN score (+ count) counts
         applyToN 0 _ rest   = rest
         applyToN n f (x:xs) = f x : applyToN (n - 1) f xs
-  in
-    addCards' startingCards
 
 
 main :: IO()
 main = do
     stdin <- getContents
     let games = map parseGame . lines $ stdin
-        startingCards = 1 : startingCards
     print . sum . map (score . winningNums) $ games
     print . sum . addCards . map (size . winningNums) $ games
