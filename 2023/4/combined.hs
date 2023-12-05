@@ -3,7 +3,6 @@ import Data.Either(fromRight)
 import Data.HashSet(HashSet, fromList, intersection, size)
 import Text.Parsec(endBy, eof, many1, parse, sepBy)
 import Text.Parsec.Char(char, digit, string)
-import System.IO.Unsafe(unsafePerformIO)
 
 
 data Scratch = Scratch{ticketId :: Int, winners :: [Int], nums :: [Int]}
@@ -40,7 +39,7 @@ addCards :: [Int] -> [Int]
 addCards scores = let
     startingCards = 1 : startingCards
     addCards' []             _              = []
-    addCards' (score:scores) (count:counts) = seq (unsafePerformIO . print . take 10 $ counts) $ count : addCards' scores counts'
+    addCards' (score:scores) (count:counts) = count : addCards' scores counts'
       where
         counts' = applyToN score (+ count) counts
         applyToN 0 _ rest   = rest
@@ -55,4 +54,4 @@ main = do
     let games = map parseGame . lines $ stdin
         startingCards = 1 : startingCards
     print . sum . map (score . winningNums) $ games
-    print . addCards . map (size . winningNums) $ games
+    print . sum . addCards . map (size . winningNums) $ games
