@@ -3,7 +3,7 @@ name:               aoc
 version:            0.1.0.0
 
 executable aoc
-    main-is: one.hs
+    main-is: combined.hs
     build-depends:
         base ^>=4.15.1.0,
         from-sum,
