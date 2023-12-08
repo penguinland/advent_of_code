@@ -1,0 +1,7 @@
+L
+
+AAA = (AAB, AAB)
+AAB = (AAZ, AAZ)
+AAZ = (AAA, AAA)
+BBA = (BBZ, BBZ)
+BBZ = (BBA, BBA)
