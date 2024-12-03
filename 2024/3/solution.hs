@@ -34,10 +34,10 @@ parseData = fromEither (error . show) . parse parseLine ""
 switchOn :: [Instruction] -> [Int]
 switchOn = switchOn' True
   where
-    switchOn' _  [] = []
-    switchOn' _  (Do  :xs)       = switchOn' True  xs
-    switchOn' _  (Dont:xs)       = switchOn' False xs
-    switchOn' on (Garbage:xs)    = switchOn' on xs
+    switchOn' _  []              = []
+    switchOn' _  (Do        :xs) = switchOn' True  xs
+    switchOn' _  (Dont      :xs) = switchOn' False xs
+    switchOn' on (Garbage   :xs) = switchOn' on xs
     switchOn' on ((Prod val):xs) = (if on then (val:) else id) $ switchOn' on xs
 
 
