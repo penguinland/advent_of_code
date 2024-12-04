@@ -8,6 +8,15 @@ rotate :: [[a]] -> [[a]]
 rotate = map reverse . transpose  -- Rotates the block 90 degrees clockwise
 
 
+-- Example input:   a b c
+--                  d e f
+--                  g h i
+--
+-- Example output:    a
+--                   d b
+--                  g e c
+--                   h f
+--                    i
 diagonals :: [String] -> [String]
 diagonals block = let
     rowCount = length block
