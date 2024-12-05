@@ -36,16 +36,16 @@ findMiddle xs  = findMiddle . tail . init $ xs
 isSafe :: [(Int, Int)] -> [Int] -> Bool
 isSafe rules update = let
     pairs = zipWith (,) (init update) (tail update)
-    pairOk (a, b) = not . any (== (b, a)) $ rules
+    pairOk (a, b) = not . elem (b, a) $ rules
   in
     all pairOk pairs
 
 
 order :: [(Int, Int)] -> Int -> Int -> Ordering
-order rules a b | any (== (a, b)) rules = LT
-order rules a b | any (== (b, a)) rules = GT
-order _     a b | a == b                = EQ
-order _     _ _ | otherwise             = error "partial ordering"
+order rules a b | elem (a, b) rules = LT
+order rules a b | elem (b, a) rules = GT
+order _     a b | a == b            = EQ
+order _     _ _ | otherwise         = error "partial ordering"
 
 
 main :: IO ()
