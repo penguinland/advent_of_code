@@ -1,6 +1,6 @@
-import Combinatorics(permute)
 import Control.FromSum(fromEither)
 import Data.List(sortBy)
+import GHC.Utils.Misc(isSortedBy)
 import Text.Parsec(eof, many, many1, parse, sepBy)
 import Text.Parsec.Char(char, digit)
 
@@ -34,11 +34,7 @@ findMiddle xs  = findMiddle . tail . init $ xs
 
 
 isSafe :: [(Int, Int)] -> [Int] -> Bool
-isSafe rules update = let
-    pairs = zipWith (,) (init update) (tail update)
-    pairOk (a, b) = not . elem (b, a) $ rules
-  in
-    all pairOk pairs
+isSafe rules = isSortedBy (order rules)
 
 
 order :: [(Int, Int)] -> Int -> Int -> Ordering
