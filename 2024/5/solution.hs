@@ -44,8 +44,8 @@ isSafe rules update = let
 order :: [(Int, Int)] -> Int -> Int -> Ordering
 order rules a b | any (== (a, b)) rules = LT
 order rules a b | any (== (b, a)) rules = GT
-order rules a b | a == b                = EQ
-order rules a b | otherwise             = error "partial ordering"
+order _     a b | a == b                = EQ
+order _     _ _ | otherwise             = error "partial ordering"
 
 
 main :: IO ()
@@ -53,4 +53,5 @@ main = do
     contents <- getContents
     let (rules, updates) = parseData contents
     print . sum . map findMiddle . filter (isSafe rules) $ updates
-    print . sum . map findMiddle . map (sortBy $ order rules) . filter (not . isSafe rules) $ updates
+    print . sum . map (findMiddle . sortBy (order rules)) .
+        filter (not . isSafe rules) $ updates
