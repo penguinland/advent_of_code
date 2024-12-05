@@ -28,7 +28,7 @@ parseData = fromEither (error . show) . parse parseFile ""
 
 
 findMiddle :: [Int] -> Int
-findMiddle [] = error "even length update!?"
+findMiddle [] = error "empty update!?"
 findMiddle xs = xs !! ((length xs + 1) `div` 2)
 
 
