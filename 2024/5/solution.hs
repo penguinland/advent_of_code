@@ -1,4 +1,6 @@
+import Combinatorics(permute)
 import Control.FromSum(fromEither)
+import Data.List(sortBy)
 import Text.Parsec(eof, many, many1, parse, sepBy)
 import Text.Parsec.Char(char, digit)
 
@@ -39,8 +41,16 @@ isSafe rules update = let
     all pairOk pairs
 
 
+isValid :: [(Int, Int)] -> Int -> Int -> Ordering
+isValid rules a b | any (== (a, b)) rules = LT
+isValid rules a b | any (== (b, a)) rules = GT
+isValid rules a b | a == b                = EQ
+isValid rules a b | otherwise             = error "partial ordering"
+
+
 main :: IO ()
 main = do
     contents <- getContents
     let (rules, updates) = parseData contents
     print . sum . map findMiddle . filter (isSafe rules) $ updates
+    print . sum . map findMiddle . map (sortBy $ isValid rules) . filter (not . isSafe rules) $ updates
