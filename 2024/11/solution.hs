@@ -19,4 +19,3 @@ main :: IO ()
 main = do
     contents <- getContents
     print . length . nTimes 25 blink . map (read) . words $ contents
-    print . length . nTimes 75 blink . map (read) . words $ contents
